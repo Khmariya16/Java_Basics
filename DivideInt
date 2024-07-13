@@ -1,0 +1,36 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        //edge cases
+        if (divisor == 0 ){
+            throw new ArithmeticException("Division by zero");
+        }
+        if (dividend == Integer.MIN_VALUE && divisor == -1){
+            return Integer.MAX_VALUE;
+        }
+
+        boolean negative = (dividend < 0) ^ (divisor < 0);
+
+        //converrting to positives
+        long absDividend = Math.abs((long) dividend);
+        long absDivisor = Math.abs((long) divisor);
+
+        int quotient = 0;
+
+
+        //substract using bit manipulation
+        while (absDividend >= absDivisor){
+            long temp = absDivisor , multiple = 1;
+            while(absDividend >= (temp << 1)){
+                temp <<= 1;
+                multiple <<= 1;
+            }
+            absDividend -= temp;
+            quotient +=multiple;
+        }
+        // Apply the sign
+        quotient = negative ? -quotient : quotient;
+
+        // Ensure the result is within the 32-bit signed integer range
+        return Math.min(Math.max(quotient, Integer.MIN_VALUE), Integer.MAX_VALUE);
+    }
+}
